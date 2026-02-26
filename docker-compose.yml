@@ -1,0 +1,23 @@
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: cloud-frontend
+    ports:
+      - "3000:80"
+
+  backend:
+    image: mcr.microsoft.com/dotnet/samples:aspnetapp
+    container_name: cloud-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+
+  database:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: cloud-database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SuperTajneHaslo123!
+    ports:
+      - "1433:1433"
