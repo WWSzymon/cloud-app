@@ -24,4 +24,4 @@
 * [x] **Artefakt 1:** Architektura i struktura folderów.
 * [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
 * [x] **Artefakt 3:** Działająca warstwa prezentacji (React + Vite).
-* [ ] **Artefakt 4:** Działająca warstwa logiki backendu (.NET 9).
+* [x] **Artefakt 4:** Działająca warstwa logiki backendu (.NET 9).
