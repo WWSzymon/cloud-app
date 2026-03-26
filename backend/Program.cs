@@ -14,9 +14,14 @@ builder.Services.AddSwaggerGen();
 // 3. Pobranie Connection Stringa (zmiennej środowiskowej z Dockera)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 4. Rejestracja bazy danych MS SQL Server
+// 4. Rejestracja bazy danych MS SQL Server (z mechanizmem ponawiania prób - Retry Logic)
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString,
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)
+    ));
 
 // 5. Konfiguracja CORS - pozwala Reactowi(port 8080) na dostęp do API
 builder.Services.AddCors(options => {
@@ -37,7 +42,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<AppDbContext>();
         // 1. Tworzy bazę i tabele, jeśli ich nie ma
-        context.Database.EnsureCreated();
+       // context.Database.EnsureCreated();
         // 2. Dodaje startowe dane, jeśli tabela jest pusta (opcjonalne, ale fajne)
         if (!context.Tasks.Any())
         {

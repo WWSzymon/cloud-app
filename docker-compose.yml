@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   # Warstwa Prezentacji (React)
   frontend:
@@ -30,14 +31,25 @@ services:
   cloud-db:
     image: mcr.microsoft.com/azure-sql-edge
     container_name: cloud-db
+    restart: always
     environment:
-      SA_PASSWORD: "StrongPassword123!"
+      MSSQL_SA_PASSWORD: "StrongPassword123!"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
+    # KROK 1: Dodanie wolumenu do kontenera
+    volumes:
+      - sql-data:/var/opt/mssql
     networks:
       - cloud-network
 
+# Globalna definicja sieci
 networks:
   cloud-network:
     driver: bridge
+
+# KROK 2: Globalna definicja wolumenu
+volumes:
+  sql-data:
+    name: cloud-app_sql-data
+    external: true
