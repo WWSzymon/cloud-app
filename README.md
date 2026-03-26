@@ -25,3 +25,4 @@
 * [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
 * [x] **Artefakt 3:** Działająca warstwa prezentacji (React + Vite).
 * [x] **Artefakt 4:** Działająca warstwa logiki backendu (.NET 9).
+* [x] **Artefakt 5:** Stabilność (DTO) i trwałość (Volumes) aplikacji.
