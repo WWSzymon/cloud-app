@@ -1,7 +1,7 @@
 # Cloud Task Manager
 
 **Autor:** Szymon Wójcik  
-**Numer albumu:** 94570
+**Numer albumu:** 94570  
 
 ## Repozytorium GitHub (Remote)
 **Link do projektu:** [https://github.com/WWSzymon/cloud-app.git](https://github.com/WWSzymon/cloud-app.git)
@@ -16,13 +16,17 @@
 | Warstwa | Komponent Lokalny | Usługa Azure |
 | :--- | :--- | :--- |
 | **Prezentacja** | React 19 (Vite) | Azure Static Web Apps |
-| **Aplikacja** | .NET 9 Web API | Azure App Service |
+| **Aplikacja** | .NET 9 Web API | Azure App Service (Linux) |
 | **Dane** | SQL Server (Docker) | Azure SQL Database (Serverless) |
 
-## Status Projektu
+## Linki do wdrożonej aplikacji (Artefakt 6)
+- **Frontend (UI):** [https://zealous-mud-06ab46e1e.4.azurestaticapps.net](https://zealous-mud-06ab46e1e.4.azurestaticapps.net)
+- **Backend (API/Swagger):** [https://cloud-task-manager-api-v2-94570.azurewebsites.net/swagger](https://cloud-task-manager-api-v2-94570.azurewebsites.net/swagger)
 
-* [x] **Artefakt 1:** Architektura i struktura folderów.
-* [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
-* [x] **Artefakt 3:** Działająca warstwa prezentacji (React + Vite).
-* [x] **Artefakt 4:** Działająca warstwa logiki backendu (.NET 9).
-* [x] **Artefakt 5:** Stabilność (DTO) i trwałość (Volumes) aplikacji.
+## Status Projektu
+- [x] **Artefakt 1:** Architektura i struktura folderów.
+- [x] **Artefakt 2:** Środowisko wielokontenerowe uruchomione lokalnie (Docker Compose).
+- [x] **Artefakt 3:** Działająca warstwa prezentacji (React + Vite).
+- [x] **Artefakt 4:** Działająca warstwa logiki backendu (.NET 9).
+- [x] **Artefakt 5:** Stabilność (DTO) i trwałość (Volumes) aplikacji.
+- [x] **Artefakt 6:** Pełna integracja i wdrożenie aplikacji w chmurze Microsoft Azure.
