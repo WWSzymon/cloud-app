@@ -92,4 +92,16 @@ public async Task<ActionResult<TaskReadDto>> Create(TaskCreateDto taskDto)
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    // --- ARTEFAKT 8.4: METODA DELETE ---
+[HttpDelete("{id}")]
+public async Task<IActionResult> DeleteTask(int id)
+{
+    var task = await _context.Tasks.FindAsync(id);
+    if (task == null) return NotFound();
+
+    _context.Tasks.Remove(task);
+    await _context.SaveChangesAsync();
+    return NoContent();
+}
 }
