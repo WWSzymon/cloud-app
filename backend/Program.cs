@@ -1,21 +1,35 @@
-using CloudBackend.Data;
 using Microsoft.EntityFrameworkCore;
+using CloudBackend.Data;
 using CloudBackend.Models;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- SEKCJA USŁUG (Dependency Injection) ---
-// 1. Rejestracja Kontrolerów (potrzebne, aby API działało)
-builder.Services.AddControllers();
+// --- SEKCJA 1: INTEGRACJA Z AZURE KEY VAULT ---
+// Wykonywana tylko, gdy aplikacja działa w trybie Production (w chmurze Azure)
+if (builder.Environment.IsProduction())
+{
+    // Pobiera nazwę sejfu ze Zmiennych środowiskowych (KeyVaultName)
+    var vaultName = builder.Configuration["KeyVaultName"];
+    if (!string.IsNullOrEmpty(vaultName))
+    {
+        var keyVaultEndpoint = new Uri($"https://{vaultName}.vault.azure.net/");
+        // Wykorzystuje Tożsamość Zarządzaną do bezpiecznego dostępu bez haseł
+        builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+    }
+}
 
-// 2. Dokumentacja API (Swagger/OpenAPI)
+// --- SEKCJA 2: REJESTRACJA USŁUG (Dependency Injection) ---
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 3. Pobranie Connection Stringa (z Azure lub środowiska lokalnego)
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Logika pobierania Connection Stringa:
+// 1. Najpierw szuka "DbConnectionString" (nazwa z Twojego Key Vaulta)
+// 2. Jeśli nie znajdzie, szuka "DefaultConnection" (z pliku appsettings.json)
+var connectionString = builder.Configuration["DbConnectionString"] 
+                       ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 4. Rejestracja bazy danych MS SQL Server (z mechanizmem ponawiania prób - Retry Logic)
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString,
         sqlOptions => sqlOptions.EnableRetryOnFailure(
@@ -24,7 +38,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             errorNumbersToAdd: null)
     ));
 
-// 5. Konfiguracja CORS - pozwala Reactowi na dostęp do API
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
         policy.AllowAnyOrigin()
@@ -35,35 +48,37 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
-// --- AUTOMATYCZNE TWORZENIE BAZY I DANYCH ---
+// --- SEKCJA 3: AUTOMATYCZNE DANE STARTOWE ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
-        // Dodaje startowe dane, jeśli tabela jest pusta
+        // Dodaje zadania do bazy, jeśli tabela jest pusta
         if (!context.Tasks.Any())
         {
             context.Tasks.AddRange(
                 new CloudTask { Name = "Zrobić kawę", IsCompleted = true },
-                new CloudTask { Name = "Uruchomić projekt w Dockerze", IsCompleted = false }
+                new CloudTask { Name = "Zabezpieczyć aplikację w Azure", IsCompleted = true }
             );
             context.SaveChanges();
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Błąd podczas tworzenia bazy: {ex.Message}");
+        // Wyświetli błąd w "Log stream" jeśli połączenie z bazą nie zadziała
+        Console.WriteLine($"Błąd inicjalizacji bazy danych: {ex.Message}");
     }
 }
 
-// --- SEKCJA POTOKU HTTP (Middleware) ---
-// Uruchamiamy Swaggera - teraz będzie domyślnie pod adresem /swagger
+// --- SEKCJA 4: POTOK HTTP (Middleware) ---
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cloud API V1");
+    // Dzięki temu Swagger pojawi się od razu po wejściu na stronę główną backendu
+    c.RoutePrefix = string.Empty; 
 });
 
 app.UseCors();

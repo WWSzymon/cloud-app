@@ -164,3 +164,15 @@
 /Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/obj/Release/net9.0/CloudBackend.pdb
 /Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/obj/Release/net9.0/CloudBackend.genruntimeconfig.cache
 /Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/obj/Release/net9.0/ref/CloudBackend.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Azure.Extensions.AspNetCore.Configuration.Secrets.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Azure.Security.KeyVault.Secrets.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Microsoft.Extensions.Configuration.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Microsoft.Extensions.Diagnostics.Abstractions.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/Microsoft.Extensions.Hosting.Abstractions.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/System.Diagnostics.DiagnosticSource.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/System.IO.Pipelines.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/System.Text.Encodings.Web.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/System.Text.Json.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
+/Users/szymonwojcik/Documents/Projekty_Uczelnia/cloud-app/backend/bin/release/net9.0/runtimes/win/lib/net9.0/System.Text.Encodings.Web.dll
