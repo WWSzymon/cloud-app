@@ -23,9 +23,11 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      # --- KLUCZOWA ZMIANA 1: Budujemy TYLKO backend ---
       - name: Build with dotnet
         run: dotnet build backend/CloudBackend.csproj --configuration Release
 
+      # --- KLUCZOWA ZMIANA 2: Publikujemy TYLKO backend ---
       - name: dotnet publish
         run: dotnet publish backend/CloudBackend.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
