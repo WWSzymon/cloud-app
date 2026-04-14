@@ -19,89 +19,76 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-public async Task<ActionResult<IEnumerable<TaskReadDto>>> GetAll()
-{
-    // Pobieramy encje z bazy danych
-    var tasks = await _context.Tasks.ToListAsync();
-    // Mapujemy każdą encję na obiekt DTO
-    var tasksDto = tasks.Select(t => new TaskReadDto
+    public async Task<ActionResult<IEnumerable<TaskReadDto>>> GetAll()
     {
-        Id = t.Id,
-        Name = t.Name,
-        IsCompleted = t.IsCompleted
-    });
-    return Ok(tasksDto);
-}
+        // Pobieramy encje z bazy danych
+        var tasks = await _context.Tasks.ToListAsync();
+        // Mapujemy każdą encję na obiekt DTO
+        var tasksDto = tasks.Select(t => new TaskReadDto
+        {
+            Id = t.Id,
+            Name = t.Name,
+            IsCompleted = t.IsCompleted
+        });
+        return Ok(tasksDto);
+    }
 
     [HttpGet("{id}")]
-public async Task<ActionResult<TaskReadDto>> GetById(int id)
-{
-    var task = await _context.Tasks.FindAsync(id);
-    if (task == null) return NotFound();  // Zwracamy DTO zamiast czystej encji
-    return Ok(new TaskReadDto 
-    { 
-        Id = task.Id, 
-        Name = task.Name, 
-        IsCompleted = task.IsCompleted 
-    });
-}
+    public async Task<ActionResult<TaskReadDto>> GetById(int id)
+    {
+        var task = await _context.Tasks.FindAsync(id);
+        if (task == null) return NotFound();  
+        return Ok(new TaskReadDto 
+        { 
+            Id = task.Id, 
+            Name = task.Name, 
+            IsCompleted = task.IsCompleted 
+        });
+    }
 
     [HttpPost]
-public async Task<ActionResult<TaskReadDto>> Create(TaskCreateDto taskDto)
-{
-    // 1. Mapowanie DTO -> Entity
-    // Przekształcamy to, co przyszło z sieci, na model bazy danych
-    var newTask = new CloudTask
+    public async Task<ActionResult<TaskReadDto>> Create(TaskCreateDto taskDto)
     {
-        Name = taskDto.Name,
-        IsCompleted = false // Domyślnie nowe zadanie nie jest gotowe
-    };
+        // 1. Mapowanie DTO -> Entity
+        var newTask = new CloudTask
+        {
+            Name = taskDto.Name,
+            IsCompleted = false // Domyślnie nowe zadanie nie jest gotowe
+        };
 
-    // 2. Zapis do bazy danych
-    _context.Tasks.Add(newTask);
-    await _context.SaveChangesAsync();
+        // 2. Zapis do bazy danych
+        _context.Tasks.Add(newTask);
+        await _context.SaveChangesAsync();
 
-    // 3. Mapowanie Entity -> DTO (Zwrotka)
-    // Zwracamy TaskReadDto, który zawiera już nadane przez bazę Id
-    var readDto = new TaskReadDto
-    {
-        Id = newTask.Id,
-        Name = newTask.Name,
-        IsCompleted = newTask.IsCompleted
-    };
+        // 3. Mapowanie Entity -> DTO (Zwrotka)
+        var readDto = new TaskReadDto
+        {
+            Id = newTask.Id,
+            Name = newTask.Name,
+            IsCompleted = newTask.IsCompleted
+        };
 
-    return CreatedAtAction(nameof(GetById), new { id = readDto.Id }, readDto);
-}
+        return CreatedAtAction(nameof(GetById), new { id = readDto.Id }, readDto);
+    }
  
-
     [HttpPut("{id}")] // 4. Edytuj (UPDATE)
     public async Task<ActionResult> Update(int id, CloudTask task)
     {
         if (id != task.Id) return BadRequest("ID mismatch");  
         _context.Entry(task).State = EntityState.Modified;
         await _context.SaveChangesAsync();
-        return NoContent(); // Status 204 - operacja udana, brak danych do odesłania
+        return NoContent(); 
     }
 
-    [HttpDelete("{id}")] // 5. Usuń (DELETE)
-    public async Task<ActionResult> Delete(int id)
+    // --- ARTEFAKT 8.4: METODA DELETE (Zostawiamy tylko tę jedną) ---
+    [HttpDelete("{id}")] 
+    public async Task<IActionResult> DeleteTask(int id)
     {
         var task = await _context.Tasks.FindAsync(id);
         if (task == null) return NotFound();
+
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
         return NoContent();
     }
-
-    // --- ARTEFAKT 8.4: METODA DELETE ---
-[HttpDelete("{id}")]
-public async Task<IActionResult> DeleteTask(int id)
-{
-    var task = await _context.Tasks.FindAsync(id);
-    if (task == null) return NotFound();
-
-    _context.Tasks.Remove(task);
-    await _context.SaveChangesAsync();
-    return NoContent();
-}
 }
