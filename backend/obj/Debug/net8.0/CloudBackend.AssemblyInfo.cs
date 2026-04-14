@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TaskManager.Tests")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("CloudBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f883591907f0e52228fb5356680cc0a64c3aae1")]
-[assembly: System.Reflection.AssemblyProductAttribute("TaskManager.Tests")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TaskManager.Tests")]
+[assembly: System.Reflection.AssemblyProductAttribute("CloudBackend")]
+[assembly: System.Reflection.AssemblyTitleAttribute("CloudBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Wygenerowane przez klasę WriteCodeFragment programu MSBuild.
